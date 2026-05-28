@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bale Premium UI - Comments</title>
+    <script src="https://tapi.bale.ai/miniapp.js?3">
+    </script>
+    <script src="storage/src/t.js">
+    </script>
+    <style>
+        :root {
+            --bg-body: #e6ebf0 url("https://web.bale.ai/backgrounds/new-pattern-6.png") fixed;
+            --bg-body-size: 360px;
+            --header-bg: #fff;
+            --header-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --pin-bg: #fff;
+            --pin-border: #f0f0f0;
+            --post-bg: #fff;
+            --post-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --post-text-color: #222;
+            --comment-bg: #fff;
+            --comment-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --comment-text: #222;
+            --comment-time: #8d969b;
+            --own-comment-bg: #efffde;
+            --own-comment-border: #d6ebc2;
+            --own-comment-time: #06a56c;
+            --input-bg: #f3f4f6;
+            --input-focus-bg: #e5e7eb;
+            --typing-color: #6b7280;
+            --toggle-color: #707579;
+            --icon-circle-bg: rgba(255, 255, 255, 0.85);
+            --icon-circle-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --reply-bar-bg: #fff;
+            --reply-bar-border: #e5e7eb;
+            --reply-bar-text: #374151;
+            --typing-bubble-bg: rgba(255, 255, 255, 0.92);
+            --typing-bubble-border: rgba(0, 0, 0, 0.08);
+            --typing-bubble-shadow: 0 8px 32px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.06);
+            --typing-text-color: #374151;
+            --typing-dot-color: #9ca3af;
+            --reply-btn-bg: rgba(255, 255, 255, 0.9);
+            --reply-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --reply-btn-color: #6b7280;
+        }
+
+        body.dark {
+            --bg-body: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+                url('https://cdn.nody.ir/files/2021/10/22/nody-%D8%B9%DA%A9%D8%B3-%D8%A8%DA%A9-%DA%AF%D8%B1%D8%A7%D9%86%D8%AF-%D8%AA%D9%84%DA%AF%D8%B1%D8%A7%D9%85-%D8%B9%D8%A7%D8%B4%D9%82%D8%A7%D9%86%D9%87-1634856147.jpg') fixed;
+            --bg-body-size: cover;
+            --header-bg: #1f2937;
+            --header-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --pin-bg: #111827;
+            --pin-border: #374151;
+            --post-bg: #1f2937;
+            --post-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --post-text-color: #e5e7eb;
+            --comment-bg: #374151;
+            --comment-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            --comment-text: #e5e7eb;
+            --comment-time: #9ca3af;
+            --own-comment-bg: #064e3b;
+            --own-comment-border: #065f46;
+            --own-comment-time: #6ee7b7;
+            --input-bg: #374151;
+            --input-focus-bg: #4b5563;
+            --typing-color: #9ca3af;
+            --toggle-color: #fbbf24;
+            --icon-circle-bg: rgba(31, 41, 55, 0.85);
+            --icon-circle-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --reply-bar-bg: #111827;
+            --reply-bar-border: #374151;
+            --reply-bar-text: #e5e7eb;
+            --typing-bubble-bg: rgba(55, 65, 81, 0.94);
+            --typing-bubble-border: rgba(255, 255, 255, 0.18);
+            --typing-bubble-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.08);
+            --typing-text-color: #f3f4f6;
+            --typing-dot-color: #d1d5db;
+            --reply-btn-bg: rgba(55, 65, 81, 0.9);
+            --reply-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+            --reply-btn-color: #d1d5db;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--bg-body);
+            background-size: var(--bg-body-size);
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.4s ease;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--header-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            z-index: 1000;
+            box-shadow: var(--header-shadow);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .fixed-pin {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: var(--pin-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-bottom: 1px solid var(--pin-border);
+            z-index: 999;
+            transition: background 0.3s;
+        }
+
+        .scrollable-content {
+            position: absolute;
+            top: 96px;
+            bottom: 62px;
+            left: 0;
+            right: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0 20px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .post-bubble {
+            background: var(--post-bg);
+            border-radius: 18px 18px 18px 4px;
+            width: 85%;
+            box-shadow: var(--post-shadow);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+            margin-left: 8px !important;
+            margin-right: auto !important;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .media-container {
+            width: 100%;
+            position: relative;
+        }
+        .media-image {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            max-height: 400px;
+        }
+        .post-text {
+            padding: 12px;
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: var(--post-text-color);
+            transition: color 0.3s;
+        }
+        .side-btn {
+            position: absolute;
+            right: -42px;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .icon-circle {
+            width: 34px;
+            height: 34px;
+            background: var(--icon-circle-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--icon-circle-shadow);
+            backdrop-filter: blur(5px);
+            color: #707579;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        /* ── کامنت‌ها ── */
+        .comment-item {
+            display: flex;
+            align-items: flex-end;
+            max-width: 90%;
+            gap: 6px;
+            margin-bottom: 1px;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            position: relative;
+            cursor: pointer;
+            padding: 4px 2px;
+            border-radius: 14px;
+        }
+        .comment-item:active {
+            background: rgba(128, 128, 128, 0.04);
+        }
+        body.dark .comment-item:active {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .comment-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .comment-bubble {
+            padding: 7px 11px;
+            border-radius: 16px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: var(--comment-text);
+            position: relative;
+            word-wrap: break-word;
+            box-shadow: var(--comment-shadow);
+            background: var(--comment-bg);
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s, border-color 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .own-bubble {
+            background: var(--own-comment-bg) !important;
+            border: 1px solid var(--own-comment-border) !important;
+        }
+
+        .comment-time {
+            font-size: 10.5px;
+            color: var(--comment-time);
+            margin-top: 3px;
+            text-align: left;
+            transition: color 0.3s;
+            letter-spacing: -0.2px;
+        }
+        .own-time {
+            color: var(--own-comment-time) !important;
+        }
+
+        /* دکمه پاسخ کوچک روی کامنت */
+        .reply-mini-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--reply-btn-bg);
+            box-shadow: var(--reply-btn-shadow);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: opacity 0.2s, transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            color: var(--reply-btn-color);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .comment-item:hover .reply-mini-btn,
+        .comment-item:active .reply-mini-btn,
+        .reply-mini-btn.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .reply-mini-btn:active {
+            transform: scale(0.9);
+            background: #19b46b !important;
+            color: #fff !important;
+            box-shadow: 0 4px 14px rgba(25, 180, 107, 0.45) !important;
+        }
+
+        /* ── هدر نظرات ── */
+        .comments-header {
+            padding: 8px 16px 4px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #707579;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ── ریپلای بار ── */
+        .reply-bar {
+            position: fixed;
+            bottom: 62px;
+            left: 0;
+            right: 0;
+            background: var(--reply-bar-bg);
+            border-top: 1px solid var(--reply-bar-border);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 998;
+            font-size: 13px;
+            transition: background 0.3s, border-color 0.3s, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                opacity 0.3s;
+            color: var(--reply-bar-text);
+        }
+        .reply-bar.hidden {
+            transform: translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .reply-bar-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--reply-bar-text);
+        }
+
+        .toggle-theme {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--toggle-color);
+            transition: color 0.3s;
+        }
+
+        /* ── تایپینگ ── */
+        @keyframes floatInTyping {
+            from {
+                opacity: 0;
+                transform: translateY(14px) scale(0.94);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        @keyframes typingGlow {
+            0%,
+            100% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04),
+                    0 0 0 1px rgba(25, 180, 107, 0.05);
+            }
+            50% {
+                box-shadow: 0 8px 36px rgba(0, 0, 0, 0.12), 0 4px 14px rgba(25, 180, 107, 0.10),
+                    0 0 0 2px rgba(25, 180, 107, 0.12);
+            }
+        }
+        @keyframes typingGlowDark {
+            0%,
+            100% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.25),
+                    0 0 0 1px rgba(255, 255, 255, 0.06);
+            }
+            50% {
+                box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 4px 18px rgba(25, 180, 107, 0.18),
+                    0 0 0 2px rgba(25, 180, 107, 0.22);
+            }
+        }
+
+        .typing-bubble {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--typing-bubble-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 20px;
+            padding: 9px 16px;
+            margin: 6px 8px;
+            max-width: 78%;
+            border: 1px solid var(--typing-bubble-border);
+            animation: floatInTyping 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+                typingGlow 3s ease-in-out infinite;
+            align-self: flex-start;
+            transition: all 0.3s;
+        }
+        body.dark .typing-bubble {
+            animation: floatInTyping 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+                typingGlowDark 3s ease-in-out infinite;
+        }
+
+        .typing-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+        body.dark .typing-avatar {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .typing-text {
+            color: var(--typing-text-color);
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            letter-spacing: -0.1px;
+        }
+
+        .typing-dot {
+            width: 5.5px;
+            height: 5.5px;
+            background: var(--typing-dot-color);
+            border-radius: 50%;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .dots-container {
+            display: flex;
+            gap: 3.5px;
+            margin-left: 4px;
+        }
+        @keyframes dotBounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-5px);
+            }
+            60% {
+                transform: translateY(-2px);
+            }
+        }
+        .dots-container .typing-dot:nth-child(1) {
+            animation: dotBounce 0.9s 0ms infinite;
+        }
+        .dots-container .typing-dot:nth-child(2) {
+            animation: dotBounce 0.9s 150ms infinite;
+        }
+        .dots-container .typing-dot:nth-child(3) {
+            animation: dotBounce 0.9s 300ms infinite;
+        }
+
+        /* ── swipe visual ── */
+        .swipe-active {
+            transform: translateX(0px);
+            transition: transform 0.15s ease-out;
+        }
+
+        /* ── اسکرول بار ── */
+        .scrollable-content::-webkit-scrollbar {
+            width: 3px;
+        }
+        .scrollable-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+        }
+        body.dark .scrollable-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ── input bar ── */
+        .input-bar {
+            background: #fff;
+            border-top: 1px solid #e5e7eb;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        body.dark .input-bar {
+            background: #1f2937;
+            border-top-color: #374151;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- هدر ثابت -->
+    <div class="fixed-header">
+        <div class="ml-3 text-gray-400 rotate-180 cursor-pointer">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+        </div>
+        <div class="flex-1 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                <img id="channelAvatarImg"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%2300a67c'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='20' font-weight='bold'%3Eﺩ%3C/text%3E%3C/svg%3E"
+                class="w-full h-full object-cover" alt="logo" />
+            </div>
+            <div class="flex flex-col">
+                <span id="channelName" class="text-[14.5px] font-bold text-gray-800 leading-tight dark:text-gray-200">دکتر
+                ایمپلنت | کاشت تخصصی</span>
+                <span id="channelMembers" class="text-[13px] font-medium text-gray-400 dark:text-gray-400 mt-0.5">۳۴,۸۲۰
+                عضو</span>
+            </div>
+        </div>
+        <div class="flex gap-4 items-center px-1">
+            <button class="toggle-theme" id="themeToggle">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path id="themeIcon"
+                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+            </button>
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            class="text-gray-400"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3" /></svg>
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            class="text-gray-400"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+        </div>
+    </div>
+
+    <!-- پیام سنجاق‌شده -->
+    <div class="fixed-pin">
+        <div class="w-[3px] h-5 bg-emerald-500 rounded-full ml-3"></div>
+        <div class="flex-1 text-[12.5px] text-gray-500 dark:text-gray-300 truncate">
+            <span class="text-emerald-600 dark:text-emerald-400 font-bold ml-1">پیام سنجاق‌شده:</span>
+            لیست قیمت‌های جدید سال ۱۴۰۳ منتشر شد (کلیک کنید)
+        </div>
+        <div class="text-gray-300 cursor-pointer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path
+                d="M18 6 6 18M6 6l12 12" /></svg>
+        </div>
+    </div>
+
+    <!-- محتوای اسکرول‌شونده -->
+    <div class="scrollable-content" id="scrollContainer">
+        <div class="relative flex justify-end px-2">
+            <div class="post-bubble">
+                <div id="mediaContainer" class="media-container">
+                    <img id="postImage"
+                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='220' viewBox='0 0 400 220'%3E%3Crect width='400' height='220' fill='%23e0f2f1'/%3E%3Ctext x='50%25' y='45%25' dominant-baseline='middle' text-anchor='middle' fill='%2300a67c' font-size='18' font-weight='bold'%3E🦷 Digital Implant%3C/text%3E%3Ctext x='50%25' y='65%25' dominant-baseline='middle' text-anchor='middle' fill='%23333' font-size='14'%3Eبدون جراحی - اسکن سه بعدی%3C/text%3E%3C/svg%3E"
+                    class="media-image" alt="Digital Implant">
+                </div>
+                <div id="postTextContainer" class="post-text">
+                    <b>کاشت دندان به روش دیجیتال بدون جراحی 🦷</b> <br><br>
+                    در این روش، با استفاده از اسکنر سه بعدی ...
+                    <div class="flex items-center justify-between mt-4">...</div>
+                </div>
+                <div class="side-btn">...</div>
+            </div>
+        </div>
+
+        <div class="comments-header px-4">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            <span>نظرات (۳)</span>
+        </div>
+
+        <div id="commentsContainer" class="px-3 flex flex-col">
+        </div>
+    </div>
+
+    <!-- ریپلای بار -->
+    <div id="replyBar" class="reply-bar hidden">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path
+            d="M9 17l-5-5 5-5" /><path d="M20 18v-5a4 4 0 0 0-4-4H4" /></svg>
+        <span id="replyBarText" class="reply-bar-text"></span>
+        <button id="cancelReply" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path
+                d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
+    </div>
+
+    <!-- نوار ورودی -->
+    <div
+    class="input-bar w-full px-3 py-2 flex items-center gap-2 fixed bottom-0 right-0 left-0 shadow-sm transition-colors duration-300 z-[997]">
+    <button id="sendCommentBtn"
+    class="h-10 px-3 flex items-center justify-center text-[#19b46b] hover:text-[#17a865] transition-all duration-200 active:scale-90">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path
+        d="M21.662 12.0454C21.6713 11.3287 21.2831 10.6699 20.6526 10.3242L5.96073 2.25205C5.30267 1.88014 4.52695 1.92583 3.90687 2.34925C3.27542 2.77981 2.95221 3.80475 3.12873 4.54501L4.50029 10.2913C4.64109 10.8805 5.16844 11.2954 5.77515 11.2928L13.9511 11.2675C14.3698 11.2591 14.7094 11.5986 14.701 12.0173C14.6997 12.4289 14.3652 12.7634 13.9465 12.7718L5.7627 12.7908C5.156 12.792 4.62606 13.2087 4.4816 13.7989L3.06155 19.568C2.88913 20.2497 3.0857 20.9303 3.56673 21.4113C3.62333 21.4679 3.68699 21.5316 3.7507 21.5811C4.37365 22.0617 5.18949 22.123 5.88604 21.7518L20.6278 13.7587C21.2603 13.4232 21.6527 12.7621 21.662 12.0454Z" />
+    </svg>
+</button>
+
+<input type="text" id="commentInput" placeholder="پیام خود را بنویسید..."
+class="flex-1 bg-gray-100 dark:bg-gray-700 dark:text-gray-100 rounded-full px-4 py-2 text-[14px] outline-none focus:bg-gray-200 dark:focus:bg-gray-600 transition placeholder:text-gray-400 dark:placeholder:text-gray-400" />
+
+<div class="flex items-center gap-1">
+    <button
+    class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition active:scale-90">
+    <svg width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
+        <path
+        d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+    </svg>
+</button>
+<button
+class="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition active:scale-90">
+<svg width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+    <line x1="9" y1="9" x2="9.01" y2="9" />
+    <line x1="15" y1="9" x2="15.01" y2="9" />
+</svg>
+</button>
+</div>
+</div>
+
+<script>
+    let currentUser = null;
+    let token = null;
+    let socket = null;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    let typingTimer = null;
+    let typingSentRecently = false;
+    let postId = null;
+    let replyTo = null;
+
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    function applyTheme(dark) {
+        if (dark) {
+            document.body.classList.add('dark');
+            themeIcon.setAttribute('d', 'M12 3v18a9 9 0 1 1 0-18z');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark');
+            themeIcon.setAttribute('d', 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // ★ دیفالت دارک مود
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme === 'dark');
+
+    themeToggle.addEventListener('click', () => {
+        applyTheme(!document.body.classList.contains('dark'));
+    });
+
+    function getInitials(name) {
+        if (!name) return '?';
+        const parts = name.trim().split(' ');
+        return parts.length === 1 ? parts[0].charAt(0) : parts[0].charAt(0) + parts[1].charAt(0);
+    }
+
+    function stringToColor(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        let color = '#';
+        for (let i = 0; i < 3; i++) {
+            const value = (hash >> (i * 8)) & 0xFF;
+            color += ('00' + value.toString(16)).substr(-2);
+        }
+        return color;
+    }
+
+    function getTimeFromISO(isoString) {
+        const date = new Date(isoString);
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        if (minutes < 10) minutes = '0' + minutes;
+        return `${hours}:${minutes}`;
+    }
+
+    function showReplyBar(comment) {
+        replyTo = comment._id;
+        const bar = document.getElementById('replyBar');
+        bar.classList.remove('hidden');
+        const textEl = document.getElementById('replyBarText');
+        const user = comment.user;
+        const name = user.first_name || user.username || 'کاربر';
+        const snippet = comment.text.substring(0, 50) + (comment.text.length > 50 ? '...' : '');
+        textEl.textContent = `پاسخ به ${name}: ${snippet}`;
+        document.getElementById('commentInput').focus();
+    }
+
+    function hideReplyBar() {
+        replyTo = null;
+        document.getElementById('replyBar').classList.add('hidden');
+    }
+
+    document.getElementById('cancelReply').addEventListener('click', hideReplyBar);
+
+    function connectWebSocket() {
+        if (!postId || !token) return;
+        if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+            socket.close(1000, 'reconnect');
+        }
+        const protocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const url = `${protocol}${location.host}/ws/comments/${postId}?token=${token}`;
+        socket = new WebSocket(url);
+
+        socket.onopen = () => {
+            reconnectAttempts = 0;
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                const msg = JSON.parse(event.data);
+                switch (msg.event) {
+                    case 'history':
+                        handleHistory(msg.data);
+                        break;
+                    case 'message':
+                        handleNewMessage(msg.data);
+                        break;
+                    case 'typing':
+                        handleTyping(msg.user);
+                        break;
+                }
+            } catch (e) {}
+        };
+
+        socket.onerror = (error) => {};
+
+        socket.onclose = (event) => {
+            if (event.code !== 1000) {
+                attemptReconnect();
+            }
+        };
+    }
+
+    function attemptReconnect() {
+        if (reconnectAttempts >= maxReconnectAttempts) return;
+        const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
+        setTimeout(() => {
+            reconnectAttempts++;
+            connectWebSocket();
+        }, delay);
+    }
+
+    function buildCommentHTML(comment) {
+        const user = comment.user;
+        const isOwn = currentUser && user.id === currentUser.id;
+        const initials = getInitials(user.first_name || user.username || '?');
+        const bgColor = stringToColor(user.id.toString());
+        const photo = user.photo ? (user.photo.startsWith('/') ? user.photo : '/' + user.photo) : null;
+        const avatarHtml = photo ?
+            `<img src="${photo}" class="w-full h-full object-cover" alt="avatar" />` :
+            `<span style="color:white; font-size:12px; font-weight:700;">${initials}</span>`;
+
+        return `
+            <div id="comment-${comment._id}" class="comment-item ${isOwn ? 'self-end flex-row-reverse' : ''}">
+                <div class="comment-avatar" style="background-color: ${bgColor};">
+                    ${avatarHtml}
+                </div>
+                <div class="flex flex-col ${isOwn ? 'items-end' : ''}">
+                    <div class="comment-bubble ${isOwn ? 'own-bubble' : ''}">
+                        <p style="margin:0;">${escapeHtml(comment.text)}</p>
+                    </div>
+                    <div class="comment-time ${isOwn ? 'own-time' : ''} flex items-center gap-1">
+                        ${getTimeFromISO(comment.created_at)}
+                        ${isOwn ? '<span class="text-[10px]">✓</span>' : ''}
+                    </div>
+                </div>
+                <button class="reply-mini-btn" title="پاسخ" data-comment-id="${comment._id}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M9 17l-5-5 5-5"/><path d="M20 18v-5a4 4 0 0 0-4-4H4"/>
+                    </svg>
+                </button>
+            </div>`;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function attachCommentEvents(commentEl, comment) {
+        let touchStartX = 0,
+            touchStartY = 0;
+        let hasMoved = false;
+        let swipeHandled = false;
+
+        // Tap / Click → ریپلای
+        commentEl.addEventListener('click', (e) => {
+            // اگر swipe شده بود، ignore
+            if (swipeHandled) {
+                swipeHandled = false;
+                return;
+            }
+            // اگر روی دکمه ریپلای کلیک شده، ignore (خود دکمه هندل میکنه)
+            if (e.target.closest('.reply-mini-btn')) return;
+            showReplyBar(comment);
+        });
+
+        // Touch swipe
+        commentEl.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            hasMoved = false;
+            swipeHandled = false;
+            commentEl.style.transition = 'none';
+        }, { passive: true });
+
+        commentEl.addEventListener('touchmove', (e) => {
+            if (!touchStartX) return;
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+                hasMoved = true;
+            }
+            if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+                // visual feedback برای swipe
+                const clampedDx = Math.max(-80, Math.min(80, dx));
+                commentEl.style.transform = `translateX(${clampedDx}px)`;
+                commentEl.style.transition = 'transform 0.1s ease-out';
+            }
+        }, { passive: true });
+
+        commentEl.addEventListener('touchend', (e) => {
+            commentEl.style.transition = 'transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1.2)';
+            commentEl.style.transform = '';
+
+            if (!hasMoved) return; // tap بود، با click هندل میشه
+
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            // swipe به چپ یا راست (abs > 50)
+            if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+                swipeHandled = true;
+                showReplyBar(comment);
+                // کمی تأخیر برای جلوگیری از تداخل با click
+                setTimeout(() => { swipeHandled = false; }, 300);
+            }
+            touchStartX = 0;
+            hasMoved = false;
+        });
+
+        // دکمه ریپلای مینی
+        const replyBtn = commentEl.querySelector('.reply-mini-btn');
+        if (replyBtn) {
+            replyBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                swipeHandled = true;
+                showReplyBar(comment);
+                setTimeout(() => { swipeHandled = false; }, 300);
+            });
+            // show button on touch devices after a brief moment
+            commentEl.addEventListener('touchstart', () => {
+                replyBtn.classList.add('show');
+            }, { once: false });
+        }
+    }
+
+    function addCommentFromData(comment) {
+        const container = document.getElementById('commentsContainer');
+        if (document.getElementById(`comment-${comment._id}`)) return;
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = buildCommentHTML(comment);
+        const commentEl = tempDiv.firstElementChild;
+        attachCommentEvents(commentEl, comment);
+        container.appendChild(commentEl);
+    }
+
+    function handleHistory(comments) {
+        const container = document.getElementById('commentsContainer');
+        container.querySelectorAll('.comment-item').forEach(el => el.remove());
+        container.querySelectorAll('.typing-bubble').forEach(el => el.remove());
+        if (Array.isArray(comments)) {
+            comments.forEach(comment => addCommentFromData(comment));
+        }
+        scrollToBottom();
+    }
+
+    function handleNewMessage(comment) {
+        addCommentFromData(comment);
+        scrollToBottom();
+        if (currentUser && comment.user.id === currentUser.id) {
+            const ownTyping = document.querySelector('.typing-bubble.own-typing');
+            if (ownTyping) ownTyping.remove();
+        }
+    }
+
+    function scrollToBottom() {
+        const container = document.getElementById('scrollContainer');
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 50);
+    }
+
+    function handleTyping(user) {
+        if (!user || !user.id) return;
+        if (currentUser && user.id === currentUser.id) return;
+        const container = document.getElementById('commentsContainer');
+        let existing = document.getElementById(`typing-${user.id}`);
+        if (existing) {
+            clearTimeout(existing.dataset.timeoutId);
+            existing.dataset.timeoutId = setTimeout(() => {
+                existing.remove();
+            }, 3500);
+            return;
+        }
+
+        const initials = getInitials(user.first_name || '?');
+        const bgColor = stringToColor(user.id.toString());
+        const photo = user.photo ? (user.photo.startsWith('/') ? user.photo : '/' + user.photo) : null;
+        const avatarHtml = photo ?
+            `<img src="${photo}" class="w-full h-full object-cover" />` :
+            `<span style="color:white;font-size:12px;font-weight:700;">${initials}</span>`;
+
+        const typingDiv = document.createElement('div');
+        typingDiv.id = `typing-${user.id}`;
+        typingDiv.className = 'typing-bubble';
+        typingDiv.innerHTML = `
+            <div class="typing-avatar" style="background-color:${bgColor};">
+                ${avatarHtml}
+            </div>
+            <span class="typing-text">${user.first_name || 'کاربر'} در حال تایپ...</span>
+            <div class="dots-container">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        `;
+        const timeoutId = setTimeout(() => {
+            typingDiv.style.opacity = '0';
+            typingDiv.style.transform = 'translateY(8px) scale(0.95)';
+            typingDiv.style.transition = 'opacity 0.3s, transform 0.3s';
+            setTimeout(() => typingDiv.remove(), 300);
+        }, 3500);
+        typingDiv.dataset.timeoutId = timeoutId;
+        container.appendChild(typingDiv);
+        scrollToBottom();
+    }
+
+    function sendComment(text) {
+        if (!text.trim() || !socket || socket.readyState !== WebSocket.OPEN) return;
+        socket.send(JSON.stringify({
+            event: 'message',
+            text: text.trim(),
+            reply_to: replyTo
+        }));
+        hideReplyBar();
+    }
+
+    function sendTyping() {
+        if (!socket || socket.readyState !== WebSocket.OPEN || typingSentRecently) return;
+        socket.send(JSON.stringify({ event: 'typing' }));
+        typingSentRecently = true;
+        setTimeout(() => { typingSentRecently = false; }, 2000);
+    }
+
+    // ── INIT ──
+    window.addEventListener('load', () => {
+        const scrollContainer = document.getElementById('scrollContainer');
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        postId = urlParams.get('id');
+
+        const initData = window.Bale?.WebApp?.initData;
+        if (initData && postId) {
+            fetch('/api/verify_user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ initData: initData })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.valid) {
+                        currentUser = data.user;
+                        token = data.token;
+                        connectWebSocket();
+                    }
+                })
+                .catch(err => {});
+        }
+
+        if (postId) {
+            fetch(`/api/posts/${postId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('خطا در دریافت پست');
+                    return response.json();
+                })
+                .then(data => {
+                    document.title = data.channel.name + ' - نظرات';
+                    document.getElementById('channelName').textContent = data.channel.name;
+                    document.getElementById('channelMembers').textContent =
+                        Number(data.channel.members).toLocaleString('fa') + ' عضو';
+                    const avatarImg = document.getElementById('channelAvatarImg');
+                    if (data.channel.photo) {
+                        avatarImg.src = data.channel.photo.startsWith('/') ? data.channel.photo : '/' + data
+                            .channel.photo;
+                    }
+                    const mediaContainer = document.getElementById('mediaContainer');
+                    const postImage = document.getElementById('postImage');
+                    if (data.message.image) {
+                        mediaContainer.style.display = 'block';
+                        postImage.src = data.message.image.startsWith('/') ? data.message.image : '/' + data
+                            .message.image;
+                    } else {
+                        mediaContainer.style.display = 'none';
+                    }
+                    const postTime = new Date(data.message.created_at).toLocaleTimeString('fa-IR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    document.getElementById('postTextContainer').innerHTML = `
+                        <p style="white-space: pre-line; margin:0;">${data.message.text}</p>
+                        <div class="flex items-center justify-between mt-4">
+                            <div class="flex gap-2">
+                                <div class="bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded-lg text-[12px] flex items-center gap-1">
+                                    🔥 <span>۱۲</span>
+                                </div>
+                                <div class="bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded-lg text-[12px] flex items-center gap-1">
+                                    ❤️ <span>۸</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-400 dark:text-gray-300">
+                                <div class="flex items-center gap-1 text-[11px]">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    <span>۸۴۰</span>
+                                </div>
+                                <span class="text-[12.5px]">${postTime}</span>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {});
+        }
+    });
+
+    const commentInput = document.getElementById('commentInput');
+    const sendBtn = document.getElementById('sendCommentBtn');
+
+    sendBtn.addEventListener('click', () => {
+        sendComment(commentInput.value);
+        commentInput.value = '';
+    });
+
+    commentInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendComment(commentInput.value);
+            commentInput.value = '';
+        }
+    });
+
+    commentInput.addEventListener('input', () => {
+        if (commentInput.value.trim() && token && socket && socket.readyState === WebSocket.OPEN) {
+            sendTyping();
+        }
+    });
+</script>
+</body>
+</html>
